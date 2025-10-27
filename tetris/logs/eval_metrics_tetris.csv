@@ -1,0 +1,4 @@
+episode,reward,lines_cleared,pieces_placed,max_height,holes,steps,crashed,truncated
+1,-500.9499999999979,0,18,19,35,392,1,0
+2,-443.1499999999985,0,15,19,30,336,1,0
+3,-831.3500000000006,0,11,20,68,210,1,0
