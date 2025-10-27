@@ -2,4 +2,6 @@ gymnasium
 stable-baselines3
 selenium
 webdriver-manager
+tensorboard
 numpy
+stable-baselines3[extra]
