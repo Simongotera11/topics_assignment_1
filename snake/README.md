@@ -7,3 +7,5 @@
 # How to Test model
 
 -   Run `python test_snake.py --model models/ppo_snake_final.zip --episodes 1`
+
+-   Results are save in `snake_game_results.csv`
