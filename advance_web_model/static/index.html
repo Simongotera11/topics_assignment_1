@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Advanced E-Commerce Store</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			padding: 20px;
+		}
+
+		.container {
+			max-width: 900px;
+			margin: 0 auto;
+			background: white;
+			border-radius: 15px;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+			padding: 30px;
+		}
+
+		h1 {
+			color: #667eea;
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		h2 {
+			color: #333;
+			margin: 20px 0 15px 0;
+			padding-bottom: 10px;
+			border-bottom: 2px solid #667eea;
+		}
+
+		/* Login Form */
+		.login-container {
+			max-width: 400px;
+			margin: 50px auto;
+		}
+
+		.form-group {
+			margin-bottom: 20px;
+		}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 8px;
+			color: #555;
+			font-weight: 600;
+		}
+
+		.form-group input {
+			width: 100%;
+			padding: 12px;
+			border: 2px solid #ddd;
+			border-radius: 8px;
+			font-size: 14px;
+			transition: border-color 0.3s;
+		}
+
+		.form-group input:focus {
+			outline: none;
+			border-color: #667eea;
+		}
+
+		.form-group input.error {
+			border-color: #e74c3c;
+		}
+
+		.hint {
+			font-size: 12px;
+			color: #888;
+			margin-top: 5px;
+		}
+
+		/* Products */
+		#products {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+			gap: 20px;
+			margin-bottom: 30px;
+		}
+
+		.product {
+			border: 2px solid #e0e0e0;
+			padding: 20px;
+			border-radius: 10px;
+			text-align: center;
+			transition: transform 0.3s, box-shadow 0.3s;
+		}
+
+		.product:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+		}
+
+		.product h3 {
+			color: #333;
+			margin-bottom: 10px;
+		}
+
+		.product .price {
+			font-size: 24px;
+			color: #667eea;
+			font-weight: bold;
+			margin: 10px 0;
+		}
+
+		/* Cart */
+		#cart {
+			background: #f8f9fa;
+			padding: 20px;
+			border-radius: 10px;
+			margin-bottom: 20px;
+			min-height: 100px;
+		}
+
+		.cart-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px;
+			background: white;
+			margin-bottom: 10px;
+			border-radius: 8px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+		}
+
+		.cart-total {
+			text-align: right;
+			font-size: 20px;
+			font-weight: bold;
+			color: #333;
+			margin-top: 15px;
+			padding-top: 15px;
+			border-top: 2px solid #ddd;
+		}
+
+		/* Buttons */
+		button {
+			background: #667eea;
+			color: white;
+			border: none;
+			padding: 12px 24px;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: 600;
+			transition: background 0.3s, transform 0.1s;
+		}
+
+		button:hover {
+			background: #5568d3;
+			transform: translateY(-2px);
+		}
+
+		button:active {
+			transform: translateY(0);
+		}
+
+		button:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+			transform: none;
+		}
+
+		.btn-remove {
+			background: #e74c3c;
+			padding: 8px 16px;
+			font-size: 12px;
+		}
+
+		.btn-remove:hover {
+			background: #c0392b;
+		}
+
+		#checkoutBtn {
+			width: 100%;
+			padding: 15px;
+			font-size: 16px;
+			margin-top: 10px;
+		}
+
+		.btn-logout {
+			background: #95a5a6;
+			float: right;
+			padding: 8px 16px;
+			font-size: 13px;
+		}
+
+		/* Messages */
+		#message {
+			margin-top: 20px;
+			padding: 15px;
+			border-radius: 8px;
+			text-align: center;
+			font-weight: 600;
+			display: none;
+		}
+
+		#message.success {
+			background: #d4edda;
+			color: #155724;
+			border: 1px solid #c3e6cb;
+			display: block;
+		}
+
+		#message.error {
+			background: #f8d7da;
+			color: #721c24;
+			border: 1px solid #f5c6cb;
+			display: block;
+		}
+
+		/* Payment Form */
+		.payment-container {
+			background: #f8f9fa;
+			padding: 25px;
+			border-radius: 10px;
+			margin-top: 20px;
+		}
+
+		.form-row {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 15px;
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.user-info {
+			background: #e8f4f8;
+			padding: 10px 15px;
+			border-radius: 8px;
+			margin-bottom: 20px;
+			font-size: 14px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Login Screen -->
+		<div id="loginScreen">
+			<div class="login-container">
+				<h1>Welcome to Our Store</h1>
+				<h2>Login</h2>
+				<form id="loginForm">
+					<div class="form-group">
+						<label for="username">Username</label>
+						<input type="text" id="username" name="username" placeholder="Enter username">
+						<div class="hint">Hint: admin</div>
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" id="password" name="password" placeholder="Enter password">
+						<div class="hint">Hint: password123</div>
+					</div>
+					<button type="submit" id="loginBtn">Login</button>
+					<div id="loginMessage"></div>
+				</form>
+			</div>
+		</div>
+
+		<!-- Store Screen -->
+		<div id="storeScreen" class="hidden">
+			<h1>Simple Store</h1>
+			<div class="user-info">
+				Logged in as: <strong id="currentUser"></strong>
+				<button class="btn-logout" onclick="logout()">Logout</button>
+			</div>
+
+			<h2>Products</h2>
+			<div id="products"></div>
+
+			<h2>Shopping Cart</h2>
+			<div id="cart"></div>
+
+			<button id="checkoutBtn">Proceed to Checkout</button>
+		</div>
+
+		<!-- Checkout Screen -->
+		<div id="checkoutScreen" class="hidden">
+			<h1>Checkout</h1>
+
+			<h2>Order Summary</h2>
+			<div id="checkoutCart"></div>
+
+			<div class="payment-container">
+				<h2>Payment Information</h2>
+				<form id="paymentForm">
+					<div class="form-group">
+						<label for="cardName">Cardholder Name</label>
+						<input type="text" id="cardName" name="cardName" placeholder="John Doe">
+						<div class="hint">Hint: John Doe</div>
+					</div>
+
+					<div class="form-group">
+						<label for="cardNumber">Card Number</label>
+						<input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456"
+							maxlength="19">
+						<div class="hint">Hint: 1234567890123456</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group">
+							<label for="expiryDate">Expiry Date (MM/YY)</label>
+							<input type="text" id="expiryDate" name="expiryDate" placeholder="12/25" maxlength="5">
+							<div class="hint">Hint: 12/25</div>
+						</div>
+
+						<div class="form-group">
+							<label for="cvv">CVV</label>
+							<input type="text" id="cvv" name="cvv" placeholder="123" maxlength="3">
+							<div class="hint">Hint: 123</div>
+						</div>
+					</div>
+
+					<h2 style="margin-top: 25px;">Billing Address</h2>
+
+					<div class="form-group">
+						<label for="address">Street Address</label>
+						<input type="text" id="address" name="address" placeholder="123 Main St">
+						<div class="hint">Hint: 123 Main St</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group">
+							<label for="city">City</label>
+							<input type="text" id="city" name="city" placeholder="New York">
+							<div class="hint">Hint: New York</div>
+						</div>
+
+						<div class="form-group">
+							<label for="zipCode">ZIP Code</label>
+							<input type="text" id="zipCode" name="zipCode" placeholder="10001" maxlength="5">
+							<div class="hint">Hint: 10001</div>
+						</div>
+					</div>
+
+					<button type="button" onclick="backToCart()" style="background: #95a5a6; margin-right: 10px;">Back
+						to Cart</button>
+					<button type="submit" id="payBtn">Complete Payment</button>
+				</form>
+			</div>
+		</div>
+
+		<p id="message"></p>
+	</div>
+
+	<script>
+		// Valid credentials (hardcoded)
+		const VALID_CREDENTIALS = {
+			username: 'admin',
+			password: 'password123'
+		};
+
+		// Valid payment info (hardcoded)
+		const VALID_PAYMENT = {
+			cardName: 'John Doe',
+			cardNumber: '1234567890123456',
+			expiryDate: '12/25',
+			cvv: '123',
+			address: '123 Main St',
+			city: 'New York',
+			zipCode: '10001'
+		};
+
+		const products = [
+			{ id: 1, name: 'Laptop', price: 999 },
+			{ id: 2, name: 'Headphones', price: 199 },
+			{ id: 3, name: 'Mouse', price: 49 },
+			{ id: 4, name: 'Keyboard', price: 79 },
+		];
+
+		let cart = [];
+		let currentUser = null;
+
+		// Login handling
+		document.getElementById('loginForm').addEventListener('submit', function (e) {
+			e.preventDefault();
+			const username = document.getElementById('username').value;
+			const password = document.getElementById('password').value;
+
+			if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+				currentUser = username;
+				document.getElementById('currentUser').textContent = username;
+				showScreen('storeScreen');
+				showMessage('? Login successful!', 'success');
+				renderProducts();
+				renderCart();
+			} else {
+				document.getElementById('username').classList.add('error');
+				document.getElementById('password').classList.add('error');
+				showMessage('? Invalid credentials! Check the hints.', 'error');
+			}
+		});
+
+		// Clear error styling on input
+		document.getElementById('username').addEventListener('input', function () {
+			this.classList.remove('error');
+		});
+		document.getElementById('password').addEventListener('input', function () {
+			this.classList.remove('error');
+		});
+
+		function showScreen(screenId) {
+			document.getElementById('loginScreen').classList.add('hidden');
+			document.getElementById('storeScreen').classList.add('hidden');
+			document.getElementById('checkoutScreen').classList.add('hidden');
+			document.getElementById(screenId).classList.remove('hidden');
+		}
+
+		function logout() {
+			currentUser = null;
+			cart = [];
+			document.getElementById('username').value = '';
+			document.getElementById('password').value = '';
+			showScreen('loginScreen');
+			showMessage('?? Logged out successfully', 'success');
+		}
+
+		function renderProducts() {
+			const productsDiv = document.getElementById('products');
+			productsDiv.innerHTML = '';
+			products.forEach(p => {
+				const el = document.createElement('div');
+				el.className = 'product';
+				el.innerHTML = `
+                    <h3>${p.name}</h3>
+                    <div class="price">$${p.price}</div>
+                    <button onclick="addToCart(${p.id})">Add to Cart</button>
+                `;
+				productsDiv.appendChild(el);
+			});
+		}
+
+		function renderCart() {
+			const cartDiv = document.getElementById('cart');
+			cartDiv.innerHTML = '';
+
+			if (cart.length === 0) {
+				cartDiv.innerHTML = '<p style="text-align: center; color: #888;">Cart is empty.</p>';
+				return;
+			}
+
+			cart.forEach(item => {
+				const el = document.createElement('div');
+				el.className = 'cart-item';
+				el.innerHTML = `
+                    <span><strong>${item.name}</strong> - $${item.price}</span>
+                    <button class="btn-remove" onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+				cartDiv.appendChild(el);
+			});
+
+			const total = cart.reduce((sum, item) => sum + item.price, 0);
+			const totalEl = document.createElement('div');
+			totalEl.className = 'cart-total';
+			totalEl.innerHTML = `Total: $${total}`;
+			cartDiv.appendChild(totalEl);
+		}
+
+		function addToCart(id) {
+			const product = products.find(p => p.id === id);
+			if (product) {
+				cart.push(product);
+				renderCart();
+				showMessage(`? ${product.name} added to cart!`, 'success');
+			}
+		}
+
+		function removeFromCart(id) {
+			const index = cart.findIndex(item => item.id === id);
+			if (index > -1) {
+				const removed = cart.splice(index, 1)[0];
+				renderCart();
+				showMessage(`??? ${removed.name} removed from cart`, 'success');
+			}
+		}
+
+		document.getElementById('checkoutBtn').onclick = function () {
+			if (cart.length === 0) {
+				showMessage('? Cannot checkout an empty cart!', 'error');
+				return;
+			}
+
+			// Show checkout screen with cart summary
+			const checkoutCart = document.getElementById('checkoutCart');
+			checkoutCart.innerHTML = '';
+
+			cart.forEach(item => {
+				const el = document.createElement('div');
+				el.className = 'cart-item';
+				el.innerHTML = `<span><strong>${item.name}</strong> - $${item.price}</span>`;
+				checkoutCart.appendChild(el);
+			});
+
+			const total = cart.reduce((sum, item) => sum + item.price, 0);
+			const totalEl = document.createElement('div');
+			totalEl.className = 'cart-total';
+			totalEl.innerHTML = `Total: $${total}`;
+			checkoutCart.appendChild(totalEl);
+
+			showScreen('checkoutScreen');
+		};
+
+		function backToCart() {
+			showScreen('storeScreen');
+		}
+
+		// Payment form handling
+		// Payment form handling (regex validation)
+			document.getElementById('paymentForm').addEventListener('submit', function (e) {
+				e.preventDefault();
+
+				const cardName = document.getElementById('cardName').value.trim();
+				const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+				const expiryDate = document.getElementById('expiryDate').value.trim();
+				const cvv = document.getElementById('cvv').value.trim();
+				const address = document.getElementById('address').value.trim();
+				const city = document.getElementById('city').value.trim();
+				const zipCode = document.getElementById('zipCode').value.trim();
+
+				// Clear previous errors
+				document.querySelectorAll('#paymentForm input').forEach(input => {
+					input.classList.remove('error');
+				});
+
+				let isValid = true;
+				const errors = [];
+
+				// Regex patterns for validation
+				const nameRegex = /^[A-Za-z\s]+$/;
+				const cardRegex = /^\d{16}$/;
+				const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/; // MM/YY
+				const cvvRegex = /^\d{3,4}$/;
+				const addressRegex = /^[A-Za-z0-9\s.,#-]{5,}$/;
+				const cityRegex = /^[A-Za-z\s]+$/;
+				const zipRegex = /^\d{5}(-\d{4})?$/; // 5 or 9 digits (US-style ZIP)
+
+				// Validate each field
+				if (!nameRegex.test(cardName)) {
+					document.getElementById('cardName').classList.add('error');
+					errors.push('Invalid cardholder name (letters only)');
+					isValid = false;
+				}
+
+				if (!cardRegex.test(cardNumber)) {
+					document.getElementById('cardNumber').classList.add('error');
+					errors.push('Invalid card number (must be 16 digits)');
+					isValid = false;
+				}
+
+				if (!expiryRegex.test(expiryDate)) {
+					document.getElementById('expiryDate').classList.add('error');
+					errors.push('Invalid expiry date (format MM/YY)');
+					isValid = false;
+				}
+
+				if (!cvvRegex.test(cvv)) {
+					document.getElementById('cvv').classList.add('error');
+					errors.push('Invalid CVV (3–4 digits)');
+					isValid = false;
+				}
+
+				if (!addressRegex.test(address)) {
+					document.getElementById('address').classList.add('error');
+					errors.push('Invalid address');
+					isValid = false;
+				}
+
+				if (!cityRegex.test(city)) {
+					document.getElementById('city').classList.add('error');
+					errors.push('Invalid city (letters only)');
+					isValid = false;
+				}
+
+				if (!zipRegex.test(zipCode)) {
+					document.getElementById('zipCode').classList.add('error');
+					errors.push('Invalid ZIP code (5 or 9 digits)');
+					isValid = false;
+				}
+
+				if (isValid) {
+					const total = cart.reduce((sum, item) => sum + item.price, 0);
+					showMessage(`? Payment successful! Order total: $${total}. Thank you for your purchase!`, 'success');
+
+					// Reset and go back to store
+					cart = [];
+					document.getElementById('paymentForm').reset();
+					setTimeout(() => {
+						showScreen('storeScreen');
+						renderCart();
+					}, 3000);
+				} else {
+					showMessage(`? Payment failed: ${errors.join(', ')}.`, 'error');
+				}
+			});
+
+
+		// Auto-format card number
+		document.getElementById('cardNumber').addEventListener('input', function (e) {
+			let value = e.target.value.replace(/\s/g, '');
+			let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+			e.target.value = formattedValue;
+		});
+
+		// Auto-format expiry date
+		document.getElementById('expiryDate').addEventListener('input', function (e) {
+			let value = e.target.value.replace(/\D/g, '');
+			if (value.length >= 2) {
+				value = value.slice(0, 2) + '/' + value.slice(2, 4);
+			}
+			e.target.value = value;
+		});
+
+		function showMessage(text, type) {
+			const message = document.getElementById('message');
+			message.textContent = text;
+			message.className = type;
+			message.style.display = 'block';
+
+			setTimeout(() => {
+				message.style.display = 'none';
+			}, 4000);
+		}
+
+		// Initialize login screen
+		showScreen('loginScreen');
+	</script>
+</body>
+
+</html>

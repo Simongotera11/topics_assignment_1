@@ -1,0 +1,46 @@
+body {
+	font-family: Arial, sans-serif;
+	max-width: 700px;
+	margin: 2rem auto;
+	padding: 1rem;
+}
+
+h1,
+h2 {
+	text-align: center;
+}
+
+.product,
+.cart-item {
+	display: flex;
+	justify-content: space-between;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	padding: 10px;
+	margin: 5px 0;
+}
+
+button {
+	cursor: pointer;
+	background: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 6px 12px;
+}
+
+button:hover {
+	background: #0056b3;
+}
+
+#checkoutBtn {
+	display: block;
+	margin: 20px auto;
+	background: #28a745;
+}
+
+#message {
+	text-align: center;
+	font-weight: bold;
+	margin-top: 1rem;
+}
